@@ -1,40 +1,45 @@
-NUTRITRACK WEB - PRIMERA VERSION
+NUTRITRACK WEB - VERSION 2
 
-Qué incluye:
-- Registro diario de alimentos y macros.
-- Objetivo inicial de 2.300 kcal (editable).
-- Resumen de calorías, proteínas, carbohidratos y grasas.
-- Selector de fecha para revisar días anteriores.
-- Registro de peso.
-- Exportación e importación de copia de seguridad JSON.
-- Diseño adaptable a Android.
-- PWA con caché para uso posterior sin conexión.
+NOVEDADES
+- Catálogo personal de alimentos.
+- Búsqueda rápida en el catálogo.
+- Creación de alimentos personalizados a partir de etiquetas.
+- Valores nutricionales guardados por 100 g.
+- Registro de cantidades en gramos con cálculo automático de macros.
+- Estadísticas de los últimos 7 días: promedios de calorías/proteínas y barras diarias.
+- Conserva los registros, objetivos y peso guardados por la versión anterior.
+- Exportación/importación de respaldo incluye ahora también el catálogo.
 
 IMPORTANTE SOBRE LOS DATOS
 Los datos se guardan en localStorage del navegador de este dispositivo.
 No se envían a ningún servidor. Si borras los datos del sitio/navegador,
 puedes perderlos. Exporta respaldos periódicamente desde el botón ↥.
 
-CÓMO PUBLICAR DESDE EL CELULAR (GRATIS CON GITHUB PAGES)
-1. Descarga y descomprime NutriTrack-Web.zip en tu teléfono.
-2. En Chrome abre https://github.com y crea una cuenta o inicia sesión.
-3. Crea un repositorio nuevo llamado nutritrack-web.
-4. En el repositorio, usa Add file > Upload files.
-5. Sube TODOS los archivos y carpetas de esta carpeta (index.html,
-   styles.css, app.js, manifest.webmanifest, sw.js, icon.svg).
+CÓMO ACTUALIZAR TU SITIO DE GITHUB PAGES DESDE ANDROID
+1. Descarga y descomprime NutriTrack-Web-v2.zip.
+2. Abre https://github.com desde Chrome e inicia sesión.
+3. Entra al repositorio soulshred/nutritrack-web.
+4. Pulsa Add file > Upload files.
+5. Sube los archivos de esta carpeta a la raíz del repositorio y acepta
+   reemplazar los archivos existentes: index.html, app.js, styles.css y sw.js.
+   También puedes volver a subir manifest.webmanifest e icon.svg.
 6. Pulsa Commit changes.
-7. En Settings > Pages, en Build and deployment selecciona Deploy from a branch.
-8. Elige la rama main y la carpeta /(root), y guarda.
-9. Espera a que GitHub Pages publique el sitio. La dirección será
-   https://TU-USUARIO.github.io/nutritrack-web/
-10. Abre esa dirección en Chrome Android. Menú ⋮ > Añadir a pantalla
-    de inicio (o Instalar aplicación, si aparece).
+7. Espera un momento y abre https://soulshred.github.io/nutritrack-web/.
+8. Si sigue apareciendo la versión anterior, cierra la PWA y abre el sitio
+   en una pestaña de Chrome; recarga. El service worker nuevo actualizará
+   los archivos estáticos y retirará la caché anterior.
+
+CÓMO USAR EL CATÁLOGO
+1. Pulsa “Buscar alimento y registrar”.
+2. Si el alimento existe, selecciónalo e indica los gramos consumidos.
+3. Si no existe, pulsa “Crear alimento”.
+4. Introduce los valores de la etiqueta nutricional por 100 g.
+5. Guarda; el alimento quedará en tu catálogo y podrás añadir la cantidad
+   consumida al día.
 
 NOTAS
-- Para instalar una PWA y activar el modo sin conexión se necesita HTTPS
-  o localhost. GitHub Pages ofrece HTTPS.
-- La IA todavía no está conectada. El asistente se muestra como próximamente.
-  La integración opcional requerirá un backend seguro; nunca pongas una
-  clave de API directamente en app.js ni en el navegador.
-- Esta es una primera versión funcional de la interfaz y el registro local,
-  no una aplicación auditada ni una solución de respaldo automático.
+- No se inventan valores nutricionales: completa el catálogo usando las
+  etiquetas reales de tus productos.
+- La IA todavía no está conectada. La app funciona sin IA ni consumo API.
+- La estadística semanal usa los días con alimentos registrados y se
+  calcula tomando como referencia la fecha seleccionada.

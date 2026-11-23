@@ -16,7 +16,7 @@
     <button class="icon-btn" id="backupBtn" aria-label="Copias de seguridad" title="Copias de seguridad">↥</button>
   </header>
 
-  <main>
+  <main id="inicio">
     <section class="welcome">
       <div><p class="eyebrow">RESUMEN DIARIO</p><h1>Hola 👋</h1><p class="muted">Un paso a la vez. Hoy cuenta.</p></div>
       <input id="dayPicker" type="date" aria-label="Seleccionar día">
@@ -35,16 +35,25 @@
 
     <section class="section-title"><div><p class="eyebrow">TU REGISTRO</p><h2>Comidas del día</h2></div><button class="text-btn" id="goalBtn">Objetivos ⚙</button></section>
     <div id="mealList" class="meal-list"></div>
-    <button class="add-btn" id="addBtn"><span>＋</span> Añadir alimento</button>
+    <button class="add-btn" id="addBtn"><span>＋</span> Buscar alimento y registrar</button>
+
+    <section class="section-title"><div><p class="eyebrow">TENDENCIAS</p><h2>Últimos 7 días</h2></div></section>
+    <section class="card stats-card">
+      <div class="stats-summary">
+        <div><span>Promedio kcal</span><strong id="avgCalories">—</strong></div>
+        <div><span>Promedio proteína</span><strong id="avgProtein">—</strong></div>
+      </div>
+      <div id="weeklyBars" class="weekly-bars"></div>
+      <p class="hint stats-hint">Promedios calculados sobre los días que tienen alimentos registrados.</p>
+    </section>
 
     <section class="section-title weight-heading"><div><p class="eyebrow">PROGRESO</p><h2>Mi peso</h2></div><button class="text-btn" id="weightBtn">＋ Registrar</button></section>
     <section class="card weight-card"><div><span class="muted">Último registro</span><h2 id="latestWeight">— <small>kg</small></h2></div><div class="weight-note" id="weightDate">Registra tu peso para comenzar</div></section>
 
     <section class="ai-card">
-      <div class="ai-icon">✦</div><div class="ai-copy"><strong>Asistente NutriTrack</strong><p>La integración con IA será opcional. Por ahora puedes registrar tus comidas manualmente, sin costos de API.</p></div>
+      <div class="ai-icon">✦</div><div class="ai-copy"><strong>Asistente NutriTrack</strong><p>La integración con IA será opcional. Tus registros y cálculos funcionan sin IA ni costos de API.</p></div>
       <span class="coming">PRÓXIMAMENTE</span>
     </section>
-
     <section class="privacy-note"><span>🔒</span><p><strong>Tus datos son tuyos.</strong> Se guardan localmente en este dispositivo. Exporta una copia de seguridad periódicamente.</p></section>
   </main>
 
@@ -52,17 +61,34 @@
 
   <dialog id="foodDialog">
     <form method="dialog" id="foodForm">
-      <div class="modal-head"><div><p class="eyebrow">REGISTRO DE ALIMENTO</p><h2 id="foodTitle">Añadir alimento</h2></div><button class="close-btn" value="cancel" aria-label="Cerrar">×</button></div>
-      <label>Alimento<input id="foodName" required maxlength="70" placeholder="Ej. Yogur protein"></label>
-      <label>Comida<select id="mealType"><option>Desayuno</option><option>Almuerzo</option><option>Once</option><option>Cena</option><option>Snack</option></select></label>
-      <div class="field-grid">
-        <label>Calorías (kcal)<input id="foodCalories" type="number" min="0" step="1" required placeholder="150"></label>
-        <label>Proteínas (g)<input id="foodProtein" type="number" min="0" step="0.1" value="0"></label>
-        <label>Carbohidratos (g)<input id="foodCarbs" type="number" min="0" step="0.1" value="0"></label>
-        <label>Grasas (g)<input id="foodFat" type="number" min="0" step="0.1" value="0"></label>
+      <div class="modal-head"><div><p class="eyebrow">BASE DE ALIMENTOS</p><h2>Buscar alimento</h2></div><button class="close-btn" value="cancel" aria-label="Cerrar">×</button></div>
+      <label>Buscar en tus alimentos<input id="foodSearch" type="search" placeholder="Ej. yogur, avena, pan…" autocomplete="off"></label>
+      <div id="catalogResults" class="catalog-results"></div>
+      <div class="catalog-add-row"><span>¿No está en tu lista?</span><button class="text-btn" type="button" id="newFoodBtn">＋ Crear alimento</button></div>
+      <div id="quickAddPanel" class="quick-add-panel" hidden>
+        <div class="selected-food"><strong id="selectedFoodName"></strong><small id="selectedFoodInfo"></small></div>
+        <div class="field-grid">
+          <label>Cantidad (gramos)<input id="foodGrams" type="number" min="0.1" step="0.1" value="100" inputmode="decimal"></label>
+          <label>Comida<select id="mealType"><option>Desayuno</option><option>Almuerzo</option><option>Once</option><option>Cena</option><option>Snack</option></select></label>
+        </div>
+        <div id="calculatedMacros" class="calculated-macros"></div>
+        <button class="primary-btn" type="button" id="confirmAddFood">Añadir al día</button>
       </div>
-      <p class="hint">Ingresa los valores de la etiqueta o tu estimación. Puedes corregirlos después.</p>
-      <button class="primary-btn" type="submit" id="saveFood">Guardar alimento</button>
+    </form>
+  </dialog>
+
+  <dialog id="customFoodDialog">
+    <form method="dialog" id="customFoodForm">
+      <div class="modal-head"><div><p class="eyebrow">TU CATÁLOGO PERSONAL</p><h2>Crear alimento</h2></div><button class="close-btn" value="cancel">×</button></div>
+      <label>Nombre del alimento<input id="customName" required maxlength="80" placeholder="Ej. Yogur natural"></label>
+      <p class="hint">Ingresa los valores nutricionales correspondientes a 100 gramos, según la etiqueta. Así podremos calcular cualquier cantidad con precisión.</p>
+      <div class="field-grid">
+        <label>Calorías (kcal)<input id="customCalories" type="number" min="0" step="0.1" required inputmode="decimal"></label>
+        <label>Proteínas (g)<input id="customProtein" type="number" min="0" step="0.1" required inputmode="decimal"></label>
+        <label>Carbohidratos (g)<input id="customCarbs" type="number" min="0" step="0.1" required inputmode="decimal"></label>
+        <label>Grasas (g)<input id="customFat" type="number" min="0" step="0.1" required inputmode="decimal"></label>
+      </div>
+      <button class="primary-btn" type="submit">Guardar en mis alimentos</button>
     </form>
   </dialog>
 
@@ -82,7 +108,7 @@
   <dialog id="weightDialog">
     <form method="dialog" id="weightForm">
       <div class="modal-head"><div><p class="eyebrow">PROGRESO</p><h2>Registrar peso</h2></div><button class="close-btn" value="cancel">×</button></div>
-      <label>Peso (kg)<input id="weightValue" type="number" min="1" max="500" step="0.1" required placeholder="106.0"></label>
+      <label>Peso (kg)<input id="weightValue" type="number" min="1" max="500" step="0.1" required placeholder="106.0" inputmode="decimal"></label>
       <button class="primary-btn" type="submit">Guardar peso</button>
     </form>
   </dialog>
@@ -90,7 +116,7 @@
   <dialog id="backupDialog">
     <form method="dialog">
       <div class="modal-head"><div><p class="eyebrow">TUS DATOS</p><h2>Copia de seguridad</h2></div><button class="close-btn" value="cancel">×</button></div>
-      <p class="muted">Exporta tus registros a un archivo JSON. Para recuperarlos, importa ese archivo desde este mismo menú.</p>
+      <p class="muted">Exporta tus registros, objetivos y catálogo personal a un archivo JSON. Para recuperarlos, importa ese archivo desde este mismo menú.</p>
       <button class="primary-btn" type="button" id="exportBtn">Exportar mis datos</button>
       <label class="import-label">Importar copia de seguridad<input id="importFile" type="file" accept="application/json,.json"></label>
       <p class="hint">Importar reemplazará los datos guardados actualmente en este navegador.</p>
