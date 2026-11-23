@@ -1,0 +1,17 @@
+{
+  "name": "NutriTrack - Seguimiento nutricional",
+  "short_name": "NutriTrack",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f2",
+  "theme_color": "#14251f",
+  "description": "Registro nutricional personal y privado.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

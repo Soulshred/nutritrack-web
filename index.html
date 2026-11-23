@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14251f">
+  <meta name="description" content="Tu registro nutricional personal, privado y local.">
+  <title>NutriTrack</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">N</div><div><strong>NutriTrack</strong><small>Tu nutrición, bajo control</small></div></div>
+    <button class="icon-btn" id="backupBtn" aria-label="Copias de seguridad" title="Copias de seguridad">↥</button>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <div><p class="eyebrow">RESUMEN DIARIO</p><h1>Hola 👋</h1><p class="muted">Un paso a la vez. Hoy cuenta.</p></div>
+      <input id="dayPicker" type="date" aria-label="Seleccionar día">
+    </section>
+
+    <section class="card calories-card">
+      <div class="section-head"><div><p class="eyebrow">CALORÍAS</p><h2><span id="calories">0</span> <small>kcal</small></h2></div><span class="pill" id="remaining">2.300 restantes</span></div>
+      <div class="progress"><span id="calorieBar"></span></div>
+      <div class="goal-line"><span>Consumidas</span><strong id="calorieGoalLabel">0 / 2.300 kcal</strong></div>
+      <div class="macro-grid">
+        <div><div class="macro-top"><span class="dot protein"></span>Proteínas</div><strong><span id="protein">0</span><small> g</small></strong><div class="mini-progress"><i id="proteinBar"></i></div></div>
+        <div><div class="macro-top"><span class="dot carbs"></span>Carbohidratos</div><strong><span id="carbs">0</span><small> g</small></strong><div class="mini-progress"><i id="carbsBar"></i></div></div>
+        <div><div class="macro-top"><span class="dot fat"></span>Grasas</div><strong><span id="fat">0</span><small> g</small></strong><div class="mini-progress"><i id="fatBar"></i></div></div>
+      </div>
+    </section>
+
+    <section class="section-title"><div><p class="eyebrow">TU REGISTRO</p><h2>Comidas del día</h2></div><button class="text-btn" id="goalBtn">Objetivos ⚙</button></section>
+    <div id="mealList" class="meal-list"></div>
+    <button class="add-btn" id="addBtn"><span>＋</span> Añadir alimento</button>
+
+    <section class="section-title weight-heading"><div><p class="eyebrow">PROGRESO</p><h2>Mi peso</h2></div><button class="text-btn" id="weightBtn">＋ Registrar</button></section>
+    <section class="card weight-card"><div><span class="muted">Último registro</span><h2 id="latestWeight">— <small>kg</small></h2></div><div class="weight-note" id="weightDate">Registra tu peso para comenzar</div></section>
+
+    <section class="ai-card">
+      <div class="ai-icon">✦</div><div class="ai-copy"><strong>Asistente NutriTrack</strong><p>La integración con IA será opcional. Por ahora puedes registrar tus comidas manualmente, sin costos de API.</p></div>
+      <span class="coming">PRÓXIMAMENTE</span>
+    </section>
+
+    <section class="privacy-note"><span>🔒</span><p><strong>Tus datos son tuyos.</strong> Se guardan localmente en este dispositivo. Exporta una copia de seguridad periódicamente.</p></section>
+  </main>
+
+  <nav class="bottom-nav"><a class="active" href="#inicio">◫<small>Resumen</small></a><a href="#comidas" id="navMeals">＋<small>Comidas</small></a><a href="#peso" id="navWeight">⌁<small>Peso</small></a></nav>
+
+  <dialog id="foodDialog">
+    <form method="dialog" id="foodForm">
+      <div class="modal-head"><div><p class="eyebrow">REGISTRO DE ALIMENTO</p><h2 id="foodTitle">Añadir alimento</h2></div><button class="close-btn" value="cancel" aria-label="Cerrar">×</button></div>
+      <label>Alimento<input id="foodName" required maxlength="70" placeholder="Ej. Yogur protein"></label>
+      <label>Comida<select id="mealType"><option>Desayuno</option><option>Almuerzo</option><option>Once</option><option>Cena</option><option>Snack</option></select></label>
+      <div class="field-grid">
+        <label>Calorías (kcal)<input id="foodCalories" type="number" min="0" step="1" required placeholder="150"></label>
+        <label>Proteínas (g)<input id="foodProtein" type="number" min="0" step="0.1" value="0"></label>
+        <label>Carbohidratos (g)<input id="foodCarbs" type="number" min="0" step="0.1" value="0"></label>
+        <label>Grasas (g)<input id="foodFat" type="number" min="0" step="0.1" value="0"></label>
+      </div>
+      <p class="hint">Ingresa los valores de la etiqueta o tu estimación. Puedes corregirlos después.</p>
+      <button class="primary-btn" type="submit" id="saveFood">Guardar alimento</button>
+    </form>
+  </dialog>
+
+  <dialog id="goalDialog">
+    <form method="dialog" id="goalForm">
+      <div class="modal-head"><div><p class="eyebrow">PERSONALIZACIÓN</p><h2>Objetivos diarios</h2></div><button class="close-btn" value="cancel">×</button></div>
+      <label>Calorías (kcal)<input id="goalCalories" type="number" min="1" required></label>
+      <div class="field-grid">
+        <label>Proteínas (g)<input id="goalProtein" type="number" min="0"></label>
+        <label>Carbohidratos (g)<input id="goalCarbs" type="number" min="0"></label>
+        <label>Grasas (g)<input id="goalFat" type="number" min="0"></label>
+      </div>
+      <button class="primary-btn" type="submit">Guardar objetivos</button>
+    </form>
+  </dialog>
+
+  <dialog id="weightDialog">
+    <form method="dialog" id="weightForm">
+      <div class="modal-head"><div><p class="eyebrow">PROGRESO</p><h2>Registrar peso</h2></div><button class="close-btn" value="cancel">×</button></div>
+      <label>Peso (kg)<input id="weightValue" type="number" min="1" max="500" step="0.1" required placeholder="106.0"></label>
+      <button class="primary-btn" type="submit">Guardar peso</button>
+    </form>
+  </dialog>
+
+  <dialog id="backupDialog">
+    <form method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">TUS DATOS</p><h2>Copia de seguridad</h2></div><button class="close-btn" value="cancel">×</button></div>
+      <p class="muted">Exporta tus registros a un archivo JSON. Para recuperarlos, importa ese archivo desde este mismo menú.</p>
+      <button class="primary-btn" type="button" id="exportBtn">Exportar mis datos</button>
+      <label class="import-label">Importar copia de seguridad<input id="importFile" type="file" accept="application/json,.json"></label>
+      <p class="hint">Importar reemplazará los datos guardados actualmente en este navegador.</p>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
